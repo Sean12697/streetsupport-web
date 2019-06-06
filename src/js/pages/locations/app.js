@@ -1,5 +1,3 @@
-/* global alert */
-
 // Common modules
 import '../../common'
 
@@ -12,6 +10,7 @@ const location = require('../../location/locationSelector')
 const templating = require('../../template-render')
 const wp = require('../../wordpress')
 const MapBuilder = require('../../models/accommodation/MapBuilder')
+import { categories } from '../../../data/generated/service-categories'
 
 const initLocations = function (currentLocationId) {
   const ui = {
@@ -22,7 +21,7 @@ const initLocations = function (currentLocationId) {
   ui.form.addEventListener('submit', function (e) {
     e.preventDefault()
     const reqLocation = ui.select.value
-    if (reqLocation) {
+    if (reqLocation.length > 0) {
       location.setCurrent(reqLocation)
       browser.redirect(`/${reqLocation}`)
     }
@@ -39,7 +38,7 @@ const initLocations = function (currentLocationId) {
   .setAttribute('selected', 'selected')
 
   location.handler((result) => {
-    if (result.length) {
+    if (result.length > 0) {
       redirectToHubPage(result)
     }
   }, '.js-change-location-select')
@@ -57,20 +56,31 @@ const initNews = function (currentLocationId) {
 }
 
 const initFindHelp = function (currentLocation) {
+  const cats = categories
+  cats.find((c) => c.key === 'accom').key = 'accommodation'
+
   const ui = {
     form: document.querySelector('.js-find-help-form'),
+    select: document.querySelector('.js-find-help-cats'),
     postcode: document.querySelector('.js-find-help-postcode')
   }
+
+  cats
+    .forEach((c) => {
+      const option = document.createElement('option')
+      option.setAttribute('value', c.key)
+      option.innerText = c.name
+      ui.select.appendChild(option)
+    })
 
   ui.postcode.setAttribute('placeholder', `your postcode: eg ${currentLocation.postcode}`)
   ui.postcode.value = currentLocation.postcode
 
   ui.form.addEventListener('submit', function (e) {
     e.preventDefault()
-    const reqLocation = ui.postcode.value
-    location.setPostcode(reqLocation, () => {
-      browser.redirect('/find-help/all-service-providers/')
-    }, () => alert('We could not find your postcode, please try a nearby one'))
+    const reqPostcode = ui.postcode.value
+    const reqService = ui.select.value
+    browser.redirect(`/find-help/${reqService}/?postcode=${reqPostcode}`)
   })
 }
 
@@ -81,7 +91,10 @@ const initStatistics = function (currentLocation) {
     { field: 'totalVolunteers', link: '/give-help/volunteer/', label: 'Volunteers' },
     { field: 'totalNeeds', link: '/give-help/help/', label: 'Needs' }
   ]
-  const requiredStats = currentLocation.homePageStats || ['totalServiceProviders', 'totalNeeds', 'totalVolunteers']
+  const requiredStats = currentLocation.homePageStats && currentLocation.homePageStats.length > 0
+    ? currentLocation.homePageStats
+    : ['totalServiceProviders', 'totalNeeds', 'totalVolunteers']
+
   api
     .data(endpoints.statistics + currentLocation.id + '/latest')
     .then((result) => {
@@ -133,18 +146,6 @@ const initMap = function (currentLocation) {
     })
 }
 
-const initToolkit = function () {
-  templating.renderTemplate('js-toolkit-tpl', {}, 'js-toolkit-output')
-}
-
-const initCharter = function () {
-  templating.renderTemplate('js-charter-tpl', {}, 'js-charter-output')
-}
-
-const initBigChange = function () {
-  templating.renderTemplate('js-big-change-tpl', {}, 'js-big-change-output')
-}
-
 const initSwep = function (currentLocationId) {
   api
   .data(endpoints.cities)
@@ -164,16 +165,3 @@ initFindHelp(currentLocation)
 initStatistics(currentLocation)
 initMap(currentLocation)
 initSwep(currentLocation.id)
-
-const availableFeatures = [
-  { isEnabledFlag: 'toolkitIsEnabled', init: initToolkit },
-  { isEnabledFlag: 'charterIsEnabled', init: initCharter },
-  { isEnabledFlag: 'bigChangeIsEnabled', init: initBigChange }
-]
-
-availableFeatures
-  .forEach((f) => {
-    if (currentLocation[f.isEnabledFlag]) {
-      f.init()
-    }
-  })

@@ -28,12 +28,13 @@
     @include cf();
 
     p {
-      &:first-of-type {
-        margin-top: 0;
-      }
-
       &:last-of-type {
         margin-bottom: 0px;
+      }
+
+      &:first-of-type {
+        margin-top: 0;
+        margin-bottom: 16px;
       }
 
       .btn {
@@ -44,6 +45,13 @@
     a {
       color: $brand-r;
       text-decoration: underline;
+      &.full-size-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+      }
     }
 
     .h1,
@@ -104,13 +112,13 @@
       }
 
       @include mq($from: m) {
-        .cta:first-of-type {
+        .cta:nth-of-type(3n + 1) {
           @include push(1 of $grid-column);
         }
 
         .cta:last-of-type {
           @include span(2 of $grid-column);  // Reset last style
-          @include push(0 of $grid-column); // Reset push style
+          @include push(3 of $grid-column); // Reset push style
         }
       }
     }
@@ -161,13 +169,23 @@
   }
 }
 
+.bed-every-night-logo {
+  display: block;
+  width: 351px;
+  margin: 0 auto 20px auto;
+
+  @include mq($from: m) {
+    float: right;
+    margin: 20px;
+  }
+}
+
 .block--home-header,
 .block--location-header {
   background-image: url('../img/header-background.png');
   background-repeat: repeat-x;
   background-position: bottom;
 }
-
 .block--location-header,
 .block--home-header {
   .block__header,
@@ -177,7 +195,7 @@
   }
 
   .ctas {
-    .btn { 
+    .btn {
       @include span(1 of 2);
       &:last-of-type {
         @include last();
@@ -200,9 +218,9 @@
   @include mq($from: m) {
     padding-bottom: 30px;
 
-    .container { 
+    .container {
       & > * {
-        @include span(2 of 3); 
+        @include span(2 of 3);
         @include first();
       }
     }
@@ -211,9 +229,9 @@
 .block--location-header {
   @include mq($from: m) {
 
-    .container { 
+    .container {
       & > * {
-        @include span(1 of 2); 
+        @include span(1 of 2);
         @include first();
       }
     }
@@ -299,6 +317,10 @@
   }
 }
 
+.block-tabs--cards {
+  @include printHide();
+}
+
 .block-tabs__tab {
   @include span(1 of 2);
 
@@ -328,7 +350,7 @@
     @include span(1 of 4);
   }
 
-  &:last-of-type { 
+  &:last-of-type {
     @include last();
   }
 
@@ -370,10 +392,39 @@
 
   &--standards-toolkit {
     padding: 40px 1rem;
-    max-width: 500px;  // half of $site-container in _variables.scss
+    @include mq($from: m) {
+      max-width: 500px;  // half of $site-container in _variables.scss
+      padding: 40px 30px 40px 40px;
+    }
+  }
+
+  &--soton-charter {
+    padding: 40px 1rem;
+    @include mq($from: m) {
+      max-width: 500px;  // half of $site-container in _variables.scss
+      padding: 40px 30px 40px 40px;
+    }
+  }
+
+  &--bcp-changeforgood {
+    padding: 0 10px;
     @include mq($from: m) {
       padding: 40px 30px 40px 40px;
     }
+  }
+
+  &--migrant-fund {
+    padding: 40px 20px;
+
+    @include mq($from: m) {
+      padding: 0px;
+    }
+  }
+
+  &--migrant-fund-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   &--big-change-mcr-logo {
@@ -384,6 +435,8 @@
     align-items: center;
     justify-content: center;
     padding: 40px 0;
+
+    img { margin-bottom: 20px; }
 
     @include mq($from: m) {
       position: relative;
@@ -404,7 +457,7 @@
         position: absolute;
         top: 0;
         right: -1px;
-        transform: rotate(180deg);  
+        transform: rotate(180deg);
       }
     }
   }

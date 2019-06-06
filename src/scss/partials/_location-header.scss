@@ -3,7 +3,7 @@
     &:after {
       content: '';
       width: 100%;
-      height: 64px; 
+      height: 64px;
       background: url('../img/locations/sea-tile.png') repeat-x;
       position: absolute;
       bottom: 0;
@@ -50,6 +50,19 @@
   }
 }
 
+.location--blackpool .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      left: auto;
+      right: 0;
+      background-size: 670px;
+      width: 670px;
+      height: 400px;
+    }
+  }
+}
+
 .location--bolton .location-header {
   @include mq($from: m) {
     min-height: 400px;
@@ -68,8 +81,9 @@
       background-size: 842px;
       width: 842px;
       bottom: 0px;
-      height: 400px;
+      height: 500px;
     }
+    height: 500px;
   }
   @include mq($from: xxxl) {
     &:before {
@@ -104,8 +118,8 @@
     &:before {
       background-size: 650px;
       width: 650px;
-      height: 270px;
     }
+    min-height: 320px;
   }
 }
 
@@ -132,6 +146,30 @@
   @extend %get-in-sea;
 }
 
+.location--rochdale .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 800px;
+      background-position: left bottom;
+      width: 100%;
+      bottom: -18px;
+    }
+  }
+}
+
+
+.location--salford .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 680px;
+      background-position: left bottom;
+      width: 100%;
+      height: 349px;
+      bottom: -49px;
+    }
+  }
+}
+
 .location--southampton .location-header {
   @include mq($from: m) {
     &:before {
@@ -147,6 +185,17 @@
     }
   }
   @extend %get-in-sea;
+}
+
+.location--stockport .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 800px;
+      background-position: left bottom;
+      width: 100%;
+      bottom: 7px;
+    }
+  }
 }
 
 .location--tameside .location-header {
@@ -172,6 +221,17 @@
   }
 }
 
+.location--wakefield .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 807px;
+      width: 807px;
+      height: 351px;
+      bottom: -65px;
+    }
+  }
+}
 
 .location--wigan-and-leigh .location-header {
   @include mq($from: m) {
